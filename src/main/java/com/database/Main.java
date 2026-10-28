@@ -22,15 +22,18 @@ public class Main implements CommandLineRunner {
     }
 
     void runJDBC() {
+        jdbcTemplate.execute("DROP TABLE IF EXISTS car_rent");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS car");
+
         // table 'car' from lab work #9
-        jdbcTemplate.execute("DROP TABLE car IF EXISTS");
-        jdbcTemplate.execute("CREATE TABLE car(id SERIAL, "
+        jdbcTemplate.execute("CREATE TABLE car("
+                + "id BIGINT AUTO_INCREMENT PRIMARY KEY, "
                 + "model VARCHAR(255), max_speed INT)");
 
         // new table of rents
-        jdbcTemplate.execute("DROP TABLE car_rent IF EXISTS");
-        jdbcTemplate.execute("CREATE TABLE car_rent(id SERIAL, "
-                + "car_id BIGINT, "
+        jdbcTemplate.execute("CREATE TABLE car_rent("
+                + "id BIGINT AUTO_INCREMENT PRIMARY KEY, "
+                + "car_id BIGINT REFERENCES car(id), "
                 + "start_time TIMESTAMP, end_time TIMESTAMP, "
                 + "created_at TIMESTAMP WITH TIME ZONE)");
     }
